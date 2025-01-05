@@ -36,7 +36,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
 )
 from PyQt6.QtGui import QIcon, QIntValidator
-from PyQt6.QtCore import QTimer, QThread, pyqtSignal, Qt
+from PyQt6 import QtCore
 from collections import deque
 from typing import List, Optional
 
@@ -47,7 +47,7 @@ from InterfaceCommands import (
 from aesthetic import get_icon
 
 
-class SerialWorker(QThread):
+class SerialWorker(QtCore.QThread):
     """
     SerialWorker handles serial communication in a separate thread. It reads incoming data from
     the serial port, processes trigger conditions for multiple channels, and emits signals when
@@ -62,7 +62,7 @@ class SerialWorker(QThread):
         serial (serial.Serial): Serial port instance for communication.
     """
 
-    data_ready = pyqtSignal(list)
+    data_ready = QtCore.pyqtSignal(list)
 
     def __init__(self, port: str, baudrate: int, bufferSize: int, channels: int = 8) -> None:
         """
@@ -214,7 +214,7 @@ class EditableButton(QPushButton):
         self.customContextMenuRequested.connect(self.show_context_menu)
         self.default_label = label
 
-    def show_context_menu(self, position: Qt.QPoint) -> None:
+    def show_context_menu(self, position: QtCore.QPoint) -> None:
         """
         Displays a context menu with options to rename the button or reset it to the default label.
 
@@ -720,7 +720,7 @@ class SignalDisplay(QWidget):
         self.cursor_label.setText(f"Cursor: {cursor_pos:.6f} s")
         self.cursor_label.setPos(cursor_pos, self.channels * 2 - 1)
 
-    def closeEvent(self, event: Qt.QEvent) -> None:
+    def closeEvent(self, event: QtCore.QEvent) -> None:
         """
         Handles the close event of the SignalDisplay widget. Ensures that the worker thread is
         properly stopped before closing.

@@ -45,7 +45,7 @@ from PyQt6.QtWidgets import (
     QGroupBox,
 )
 from PyQt6.QtGui import QIcon, QIntValidator, QTextCursor, QFont
-from PyQt6.QtCore import QTimer, QThread, pyqtSignal, Qt, QPoint
+from PyQt6 import QtCore
 from collections import deque
 from typing import List, Dict, Optional
 
@@ -56,7 +56,7 @@ from InterfaceCommands import (
 from aesthetic import get_icon
 
 
-class SerialWorker(QThread):
+class SerialWorker(QtCore.QThread):
     """
     SerialWorker handles I2C serial communication in a separate thread. It reads incoming data from
     the serial port, decodes I2C messages, processes trigger conditions for multiple I2C groups,
@@ -81,8 +81,8 @@ class SerialWorker(QThread):
         sample_idx (int): Global sample index counter.
     """
 
-    data_ready = pyqtSignal(int, int)  # For raw data values and sample indices
-    decoded_message_ready = pyqtSignal(dict)  # For decoded messages
+    data_ready = QtCore.pyqtSignal(int, int)  # For raw data values and sample indices
+    decoded_message_ready = QtCore.pyqtSignal(dict)  # For decoded messages
 
     def __init__(self, port: str, baudrate: int, channels: int = 8, group_configs: Optional[List[Dict]] = None) -> None:
         """
@@ -438,7 +438,7 @@ class EditableButton(QPushButton):
         self.customContextMenuRequested.connect(self.show_context_menu)
         self.default_label = label
 
-    def show_context_menu(self, position: QPoint) -> None:
+    def show_context_menu(self, position: QtCore.QPoint) -> None:
         """
         Displays a context menu with options to rename the button or reset it to the default label.
 
@@ -469,8 +469,8 @@ class I2CChannelButton(EditableButton):
         reset_requested (pyqtSignal): Signal emitted when the reset to default option is selected.
     """
 
-    configure_requested = pyqtSignal(int)  # Signal to notify when configure is requested
-    reset_requested = pyqtSignal(int)      # Signal to notify when reset is requested
+    configure_requested = QtCore.pyqtSignal(int)  # Signal to notify when configure is requested
+    reset_requested = QtCore.pyqtSignal(int)      # Signal to notify when reset is requested
 
     def __init__(self, label: str, group_idx: int, parent: Optional[QWidget] = None) -> None:
         """
@@ -484,7 +484,7 @@ class I2CChannelButton(EditableButton):
         super().__init__(label, parent)
         self.group_idx = group_idx  # Store the index of the I2C group
 
-    def show_context_menu(self, position: QPoint) -> None:
+    def show_context_menu(self, position: QtCore.QPoint) -> None:
         """
         Displays a context menu with options to rename the button, reset to default, or configure the group.
 
@@ -1505,7 +1505,7 @@ class I2CDisplay(QWidget):
                 self.group_curves[group_idx]['sda_curve'].setVisible(False)
                 self.group_curves[group_idx]['scl_curve'].setVisible(False)
 
-    def closeEvent(self, event: Qt.QEvent) -> None:
+    def closeEvent(self, event: QtCore.QEvent) -> None:
         """
         Handles the close event of the I2CDisplay widget. Ensures that the worker thread is
         properly stopped before closing.

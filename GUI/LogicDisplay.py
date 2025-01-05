@@ -19,7 +19,7 @@ from PyQt6.QtWidgets import (
     QPushButton,
 )
 from PyQt6.QtGui import QAction
-from PyQt6.QtCore import Qt
+from PyQt6 import QtCore
 
 from typing import Optional
 
@@ -196,7 +196,7 @@ class LogicDisplay(QMainWindow):
         """
         self.baudrate = baudrate
 
-    def closeEvent(self, event: Qt.QEvent) -> None:
+    def closeEvent(self, event: QtCore.QEvent) -> None:
         """
         Handles the close event of the LogicDisplay window. Ensures that the currently active
         module is properly closed before the window itself is closed.
